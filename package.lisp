@@ -7,5 +7,15 @@
    #:initial-guess
    #:lower-bounds
    #:upper-bounds
-   #:function-to-optimize))
+   #:function-to-optimize
+   #:config
+   #:optimization-type
+   #:algorithm
+   #:stop-val
+   #:f-abs-tolerance
+   #:f-rel-tolerance
+   #:x-abs-tolerance
+   #:x-rel-tolerance
+   #:max-no-evaluations
+   #:max-time))
 

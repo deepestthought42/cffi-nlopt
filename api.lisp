@@ -71,13 +71,21 @@
       (if val
 	  (check/nlopt-result (funcall fun opt val))))))
 
-(defun set-bounds (upper-bounds lower-bounds opt)
+(defun set-bounds (opt upper-bounds lower-bounds)
   (check/nlopt-result
    (%set-upper-bounds opt upper-bounds))
   (check/nlopt-result
    (%set-lower-bounds opt lower-bounds)))
 
-
+(defun set-objective (opt optimization-type)
+  (check/nlopt-result
+   (funcall
+    (case optimization-type
+      ((:minimize :min) #'%set-min-objective)
+      ((:maximize :max) #'%set-max-objective))
+    opt
+    (cffi:callback optimization-func)
+    (cffi-sys:null-pointer))))
 
 
 (defun optimization (model config)
@@ -90,15 +98,9 @@
     (%with-double-arrays (n upper-bounds lower-bounds initial-guess)
       (cffi:with-foreign-object (optimized-val :double)
 	(with-nlopt-algorithm (opt algorithm n)
-	  (set-bounds upper-bounds lower-bounds opt)
+	  (set-bounds opt upper-bounds lower-bounds)
 	  (set-stopping-conditions opt config)
-	  (case optimization-type
-	    ((:minimize :min)
-	     (check/nlopt-result
-	      (%set-min-objective opt (cffi:callback optimization-func) (cffi-sys:null-pointer))))
-	    ((:maximize :max)
-	     (check/nlopt-result
-	      (%set-max-objective opt (cffi:callback optimization-func) (cffi-sys:null-pointer)))))
+	  (set-objective opt optimization-type)
 	  (check/nlopt-result
 	   (%optimize opt initial-guess optimized-val)))))))
 
