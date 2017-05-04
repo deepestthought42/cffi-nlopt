@@ -9,5 +9,6 @@
                #:let-plus)
   :serial t
   :components ((:file "package")
+	       (:file "constants")
                (:file "cffi-nlopt")))
 
