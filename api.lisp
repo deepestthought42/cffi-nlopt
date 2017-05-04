@@ -3,24 +3,24 @@
 
 
 
-(defgeneric no-dimensions (obj)
+(defgeneric no-dimensions (model)
   (:documentation "Return the no of dimensions (independent variables)
   of the model to optimize"))
 
-(defgeneric function-to-optimize (obj)
+(defgeneric function-to-optimize (model)
   (:documentation "Return a closure of type (FUNCTION ((CFFI:ARRAY
-  DOUBLE-FLOAT) DOUBLE-FLOAT) to optimize."))
+  DOUBLE-FLOAT) DOUBLE-FLOAT) to that represents to function to optimize MODEL with."))
 
-(defgeneric upper-bounds (obj)
-  (:documentation "Return a SEQUENCE of upper bounds for OBJ."))
+(defgeneric upper-bounds (model)
+  (:documentation "Return a SEQUENCE of upper bounds for MODEL."))
 
-(defgeneric lower-bounds (obj)
-  (:documentation "Retrun a SEQUENCE of lower bounds for the paramters
-  to be optimized."))
+(defgeneric lower-bounds (model)
+  (:documentation "Return a SEQUENCE of lower bounds for the paramters
+  of MODEL to be optimized."))
 
-(defgeneric initial-guess (obj)
+(defgeneric initial-guess (model)
   (:documentation "Return a (SIMPLE-ARRAY DOUBLE-FLOAT) of initial
-  guesses for the parameters to be optimized."))
+  guesses for the parameters of MODEL to be optimized."))
 
 
 
@@ -38,6 +38,8 @@
 
 
 (defmacro %with-double-arrays ((n &rest sequences) &body body)
+  "Macro that 'converts' the sequences in SEQUENCES to
+cffi:array and binds them to variables of the same name around BODY."
   (let ((tmp-seqs (iter
 		    (for s in sequences)
 		    (collect (gensym (string (alexandria:symbolicate 'tmp/ s)))))))
@@ -56,6 +58,7 @@
 	     (setf (cffi:mem-aref s :double i)
 		   (elt ts i))))
 	 (progn ,@body)))))
+
 
 (defun set-stopping-conditions (opt config)
   (let+ (((&slots f-abs-tolerance f-rel-tolerance
@@ -89,6 +92,17 @@
 
 
 (defun optimization (model config)
+  "Optimize model MODEL according to config given in CONFIG.  Here
+CONFIG is of type cffi-nlopt:config and MODEL must implement the
+following generic functions:
+
+nlopt:no-dimensions,
+nlopt:function-to-optimize,
+nlopt:upper-bounds,
+nlopt:lower-bounds,
+nlopt:initial-guess
+
+"
   (let+ (((&slots optimization-type algorithm) config)
 	 (n (no-dimensions model))
 	 (initial-guess (initial-guess model))
