@@ -10,5 +10,6 @@
   :serial t
   :components ((:file "package")
 	       (:file "constants")
-               (:file "cffi-nlopt")))
+               (:file "cffi-nlopt")
+	       (:file "api")))
 

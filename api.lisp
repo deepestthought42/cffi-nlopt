@@ -26,13 +26,13 @@
 
 (defclass config ()
   ((optimization-type :accessor optimization-type :initarg :optimization-type
-		      :initform :minimization)
+		      :initform :maximize)
    (algorithm :accessor algorithm :initarg :algorithm :initform +nlopt_ln_neldermead+)
    (stop-val :accessor stop-val :initarg :stop-val :initform nil)
-   (f-abs-tolerance :accessor f-abs-tolerance :initarg :f-abs-tolerance :initform 1d-6)
+   (f-abs-tolerance :accessor f-abs-tolerance :initarg :f-abs-tolerance :initform nil)
    (f-rel-tolerance :accessor f-rel-tolerance :initarg :f-rel-tolerance :initform 1d-6)
    (x-abs-tolerance :accessor x-abs-tolerance :initarg :x-abs-tolerance :initform nil)
-   (x-rel-tolerance :accessor x-rel-tolerance :initarg :x-rel-tolerance :initform nil)
+   (x-rel-tolerance :accessor x-rel-tolerance :initarg :x-rel-tolerance :initform 1d-6)
    (max-no-evaluations :accessor max-no-evaluations :initarg :max-no-evaluations :initform nil)
    (max-time :accessor max-time :initarg :max-time :initform 1d0)))
 
@@ -84,8 +84,8 @@ cffi:array and binds them to variables of the same name around BODY."
   (check/nlopt-result
    (funcall
     (case optimization-type
-      ((:minimize :min) #'%set-min-objective)
-      ((:maximize :max) #'%set-max-objective))
+      ((:minimize :min :minimization) #'%set-min-objective)
+      ((:maximize :max :maximization) #'%set-max-objective))
     opt
     (cffi:callback optimization-func)
     (cffi-sys:null-pointer))))
@@ -111,10 +111,10 @@ nlopt:initial-guess
 	 (*optimization-func* (function-to-optimize model)))
     (%with-double-arrays (n upper-bounds lower-bounds initial-guess)
       (cffi:with-foreign-object (optimized-val :double)
-	(with-nlopt-algorithm (opt algorithm n)
+	(with-algorithm (opt algorithm n)
 	  (set-bounds opt upper-bounds lower-bounds)
 	  (set-stopping-conditions opt config)
 	  (set-objective opt optimization-type)
-	  (check/nlopt-result
-	   (%optimize opt initial-guess optimized-val)))))))
-
+	  (values
+	   (%optimize opt initial-guess optimized-val)
+	   model))))))

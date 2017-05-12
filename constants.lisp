@@ -45,17 +45,17 @@
 
 (eval-when (:compile-toplevel :load-toplevel)
   (make-constants nlopt-result
-      (+NLOPT_SUCCESS+ 1) 
-      (+NLOPT_FAILURE+ -1) 
-      (+NLOPT_INVALID_ARGS+ -2)
-      (+NLOPT_OUT_OF_MEMORY+ -3)
-      (+NLOPT_ROUNDOFF_LIMITED+ -4)
-      (+NLOPT_FORCED_STOP+ -5)
-      (+NLOPT_STOPVAL_REACHED+ 2)
-      (+NLOPT_FTOL_REACHED+ 3)
-      (+NLOPT_XTOL_REACHED+ 4)
-      (+NLOPT_MAXEVAL_REACHED+ 5)
-      (+NLOPT_MAXTIME_REACHED+ 6))
+      (+NLOPT_SUCCESS+ 1 "Success.") 
+      (+NLOPT_FAILURE+ -1 "Failure.") 
+      (+NLOPT_INVALID_ARGS+ -2 "Invalid arguments given.")
+      (+NLOPT_OUT_OF_MEMORY+ -3 "Out of memory.")
+      (+NLOPT_ROUNDOFF_LIMITED+ -4 "Roundoff limited.")
+      (+NLOPT_FORCED_STOP+ -5 "Forced stop.")
+      (+NLOPT_STOPVAL_REACHED+ 2 "Stopval reached.")
+      (+NLOPT_FTOL_REACHED+ 3 "Tolerance in F reached.")
+      (+NLOPT_XTOL_REACHED+ 4 "Tolerance i X reached.")
+      (+NLOPT_MAXEVAL_REACHED+ 5 "Max. number evaluations reached.")
+      (+NLOPT_MAXTIME_REACHED+ 6 "Max. time reached."))
 
   (make-constants nlopt-algorithm
       (+nlopt_gn_direct+ 0 "DIRECT (global, no-derivative)")

@@ -17,6 +17,7 @@
    #:x-abs-tolerance
    #:x-rel-tolerance
    #:max-no-evaluations
-   #:max-time)
+   #:max-time
+   #:optimization)
   (:nicknames #:nlopt))
 
