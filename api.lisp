@@ -115,6 +115,6 @@ nlopt:initial-guess
 	  (set-bounds opt upper-bounds lower-bounds)
 	  (set-stopping-conditions opt config)
 	  (set-objective opt optimization-type)
-	  (values
-	   (%optimize opt initial-guess optimized-val)
-	   model))))))
+	  (let ((retval (%optimize opt initial-guess optimized-val)))
+	    (funcall *optimization-func* initial-guess)
+	    (values retval model (cffi:mem-ref optimized-val :double))))))))
