@@ -18,6 +18,10 @@
    #:x-rel-tolerance
    #:max-no-evaluations
    #:max-time
-   #:optimization)
+   #:optimization
+   #:docstring
+   #:nlopt-result
+   #:nlopt-algorithm
+   #:get-symbol)
   (:nicknames #:nlopt))
 

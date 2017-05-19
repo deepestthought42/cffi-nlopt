@@ -31,7 +31,7 @@
 			     ((symbolp no-or-symbol) ,symbols-bag)
 			     (t (error "DOCSTRING method needs a number or symbols as input.")))))
 	     (cdr val)
-	     (error "Unknown error: ~a" val)))
+	     (error "Unknown error: ~a" no-or-symbol)))
 	 (defmethod get-symbol ((type (eql ',type-name)) no)
 	   (alexandria:if-let (val (assoc no ,symbols-bag))
 	     (cdr val)
@@ -40,7 +40,6 @@
 	     (for (c no doc) in constants)
 	     (collect `(defconstant ,c ,no ,doc))
 	     (collect `(export ',c)))))))
-
 
 
 (eval-when (:compile-toplevel :load-toplevel)
