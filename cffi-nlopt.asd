@@ -1,9 +1,9 @@
 ;;;; cffi-nlopt.asd
 
 (asdf:defsystem #:cffi-nlopt
-  :description "Describe cffi-nlopt here"
-  :author "Your Name <your.name@example.com>"
-  :license "Specify license here"
+  :description "NLOpt foreign function interface for use in bayesian-analysis"
+  :author "Renee Klawitter <klawitterrenee@gmail.com>"
+  :license "Apache 2.0"
   :depends-on (#:cffi
                #:alexandria
                #:let-plus)
